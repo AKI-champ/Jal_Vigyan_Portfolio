@@ -1,0 +1,516 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Help & Support - Jal Vigyan</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <style>
+    :root {
+      --primary: #1e90ff;
+      --primary-dark: #0066cc;
+      --secondary: #0d6efd;
+      --light: #f8f9fa;
+      --dark: #212529;
+      --success: #198754;
+      --warning: #ffc107;
+      --danger: #dc3545;
+    }
+    
+    body { 
+      background: #f7fafc; 
+      font-family: 'Segoe UI', Tahoma, sans-serif; 
+      line-height: 1.6;
+    }
+    
+    .navbar { 
+      background: var(--primary); 
+      box-shadow: 0 2px 10px rgba(0,0,0,0.1); 
+    }
+    
+    .navbar-brand, .nav-link, .footer { 
+      color: #fff !important; 
+    }
+    
+    .nav-link { 
+      font-weight: 500; 
+      position: relative; 
+      transition: all 0.3s; 
+    }
+    
+    .nav-link:hover { 
+      color: #fff !important; 
+      transform: translateY(-2px); 
+    }
+    
+    .nav-link::after { 
+      content: ''; 
+      position: absolute; 
+      width: 0; 
+      height: 2px; 
+      bottom: 0; 
+      left: 0; 
+      background-color: #fff; 
+      transition: width 0.3s; 
+    }
+    
+    .nav-link:hover::after { 
+      width: 100%; 
+    }
+    
+    .page-hero { 
+      background: linear-gradient(rgba(0, 132, 255, 0.85), rgba(30,144,255,0.9)),url('https://media.istockphoto.com/id/1156298839/photo/kikuchi-valley-waterfall-and-ray-in-forest-japan.jpg?s=612x612&w=0&k=20&c=iua23D-nermMeJ__5JNSahBY7PS2eIQj3rqsRY9f2es=');
+      background-size: cover;
+      background-position: center;
+      color: white; 
+      padding: 100px 20px; 
+      text-align: center; 
+    }
+    
+    .footer { 
+      background: var(--primary-dark); 
+      padding: 40px 0; 
+      text-align: center; 
+    }
+    
+    .card { 
+      border-radius: 10px; 
+      transition: transform 0.3s, box-shadow 0.3s;
+    }
+    
+    .card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 10px 20px rgba(0,0,0,0.1) !important;
+    }
+    
+    .accordion-button:not(.collapsed) {
+      background-color: rgba(30, 144, 255, 0.1);
+      color: var(--primary);
+    }
+    
+    .feature-icon {
+      width: 60px;
+      height: 60px;
+      border-radius: 50%;
+      background: var(--primary);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin: 0 auto 20px;
+      color: white;
+      font-size: 24px;
+    }
+    
+    .search-box {
+      max-width: 500px;
+      margin: 0 auto 40px;
+    }
+    
+    .contact-card {
+      border-left: 4px solid var(--primary);
+    }
+    
+    .quick-links a {
+      display: block;
+      padding: 8px 0;
+      color: var(--secondary);
+      text-decoration: none;
+      transition: color 0.3s;
+    }
+    
+    .quick-links a:hover {
+      color: var(--primary);
+    }
+    
+    .badge-custom {
+      background-color: var(--primary);
+    }
+  </style>
+</head>
+<body>
+
+<nav class="navbar navbar-expand-lg navbar-dark sticky-top">
+  <div class="container">
+    <a class="navbar-brand fw-bold d-flex align-items-center" href="page1.html">
+      <i class="fas fa-tint me-2"></i> Jal Vigyan
+    </a>
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navMenu">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navMenu">
+      <ul class="navbar-nav ms-auto">
+        <li class="nav-item"><a class="nav-link" href="page1.html">Home</a></li>
+        <li class="nav-item"><a class="nav-link" href="aboutus.html">About Us</a></li>
+        <li class="nav-item"><a class="nav-link" href="contact.html">Contact</a></li>
+        <li class="nav-item"><a class="nav-link" href="#">Data Download</a></li>
+        <li class="nav-item"><a class="nav-link" href="DWLA.html">DWGA</a></li>
+        <li class="nav-item"><a class="nav-link" href="SWR.html">SWR</a></li>
+        <li class="nav-item"><a class="nav-link" href="GWS.html">GWS</a></li>
+      </ul>
+     
+    </div>
+  </div>
+</nav>
+
+<section class="page-hero">
+  <div class="container">
+    <h1 class="display-4 fw-bold mb-3">Help & Support</h1>
+    <p class="lead mb-4">Find answers to common questions, access user guides, and get the support you need.</p>
+    <div class="search-box">
+      <div class="input-group">
+        <input type="text" class="form-control" placeholder="Search for help...">
+        <button class="btn btn-light" type="button"><i class="fas fa-search"></i></button>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="py-5">
+  <div class="container">
+    <div class="row mb-5">
+      <div class="col-lg-8 mx-auto text-center">
+        <h2 class="mb-3">How can we help you today?</h2>
+        <p class="text-muted">Browse our help resources or contact our support team for personalized assistance.</p>
+      </div>
+    </div>
+    
+    <div class="row g-4 mb-5">
+      <div class="col-md-4">
+        <div class="card shadow-sm border-0 p-4 h-100 text-center">
+          <div class="feature-icon">
+            <i class="fas fa-question-circle"></i>
+          </div>
+          <h5>Frequently Asked Questions</h5>
+          <p class="text-muted">Find quick answers to common questions about our platform and services.</p>
+          <a href="#faq-section" class="btn btn-primary mt-auto">Browse FAQs</a>
+        </div>
+      </div>
+      <div class="col-md-4">
+        <div class="card shadow-sm border-0 p-4 h-100 text-center">
+          <div class="feature-icon">
+            <i class="fas fa-book"></i>
+          </div>
+          <h5>User Guides & Tutorials</h5>
+          <p class="text-muted">Step-by-step instructions for key features and functionalities.</p>
+          <a href="#guides-section" class="btn btn-primary mt-auto">View Guides</a>
+        </div>
+      </div>
+      <div class="col-md-4">
+        <div class="card shadow-sm border-0 p-4 h-100 text-center">
+          <div class="feature-icon">
+            <i class="fas fa-headset"></i>
+          </div>
+          <h5>Contact Support</h5>
+          <p class="text-muted">Can't find what you're looking for? Our support team is here to help.</p>
+          <a href="#contact-section" class="btn btn-primary mt-auto">Get Help</a>
+        </div>
+      </div>
+    </div>
+    
+    <div id="faq-section" class="mb-5">
+      <h2 class="mb-4">Frequently Asked Questions</h2>
+      <div class="accordion" id="faqAccordion">
+        <div class="accordion-item">
+          <h2 class="accordion-header">
+            <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#faq1">
+              How do I view the DWGA map?
+            </button>
+          </h2>
+          <div id="faq1" class="accordion-collapse collapse show" data-bs-parent="#faqAccordion">
+            <div class="accordion-body">
+              <p>To view the DWGA (Dynamic Water Governance Atlas) map:</p>
+              <ol>
+                <li>Navigate to the DWGA section from the main menu</li>
+                <li>Select your region of interest from the dropdown menu</li>
+                <li>Choose the data layers you wish to display</li>
+                <li>Use the zoom and pan tools to explore the map</li>
+                <li>Click on any location to view detailed information</li>
+              </ol>
+            </div>
+          </div>
+        </div>
+        <div class="accordion-item">
+          <h2 class="accordion-header">
+            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#faq2">
+              How do I download data from the platform?
+            </button>
+          </h2>
+          <div id="faq2" class="accordion-collapse collapse" data-bs-parent="#faqAccordion">
+            <div class="accordion-body">
+              <p>Data download is available for registered users. Follow these steps:</p>
+              <ol>
+                <li>Go to the Data Download section</li>
+                <li>Select the dataset category you're interested in</li>
+                <li>Choose your preferred format (CSV, JSON, or Shapefile)</li>
+                <li>Define the geographic area and time period</li>
+                <li>Click the "Download" button</li>
+              </ol>
+              <p class="mb-0"><strong>Note:</strong> Some datasets may require special permissions or may be subject to usage restrictions.</p>
+            </div>
+          </div>
+        </div>
+        <div class="accordion-item">
+          <h2 class="accordion-header">
+            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#faq3">
+              How do I interpret SWR recommendations?
+            </button>
+          </h2>
+          <div id="faq3" class="accordion-collapse collapse" data-bs-parent="#faqAccordion">
+            <div class="accordion-body">
+              <p>SWR (Sustainable Water Resources) recommendations are based on comprehensive analysis of water availability, usage patterns, and environmental factors. Key elements include:</p>
+              <ul>
+                <li><strong>Water Allocation Priorities:</strong> Suggested distribution across sectors</li>
+                <li><strong>Conservation Measures:</strong> Efficiency improvements and reduction strategies</li>
+                <li><strong>Risk Assessment:</strong> Identification of vulnerable areas and periods</li>
+                <li><strong>Implementation Timeline:</strong> Short, medium, and long-term actions</li>
+              </ul>
+              <p>Each recommendation includes supporting data and rationale for informed decision-making.</p>
+            </div>
+          </div>
+        </div>
+        <div class="accordion-item">
+          <h2 class="accordion-header">
+            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#faq4">
+              What is the difference between DWGA and GWS?
+            </button>
+          </h2>
+          <div id="faq4" class="accordion-collapse collapse" data-bs-parent="#faqAccordion">
+            <div class="accordion-body">
+              <p>DWGA (Dynamic Water Governance Atlas) and GWS (Groundwater Sustainability) serve different but complementary purposes:</p>
+              <div class="row">
+                <div class="col-md-6">
+                  <h6>DWGA</h6>
+                  <ul>
+                    <li>Focuses on surface water resources</li>
+                    <li>Provides governance and policy information</li>
+                    <li>Includes administrative boundaries and regulations</li>
+                    <li>Dynamic mapping of water governance structures</li>
+                  </ul>
+                </div>
+                <div class="col-md-6">
+                  <h6>GWS</h6>
+                  <ul>
+                    <li>Concentrates on groundwater resources</li>
+                    <li>Assesses aquifer health and sustainability</li>
+                    <li>Includes recharge rates and extraction data</li>
+                    <li>Projects future groundwater availability</li>
+                  </ul>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    
+    <div id="guides-section" class="mb-5">
+      <h2 class="mb-4">User Guides & Tutorials</h2>
+      <div class="row g-4">
+        <div class="col-md-6 col-lg-4">
+          <div class="card shadow-sm border-0 h-100">
+            <div class="card-body p-4">
+              <div class="d-flex align-items-center mb-3">
+                <span class="badge badge-custom me-2">Beginner</span>
+                <small class="text-muted">10 min read</small>
+              </div>
+              <h5 class="card-title">Getting Started with Jal Vigyan</h5>
+              <p class="card-text text-muted">A comprehensive guide for new users to navigate the platform and access basic features.</p>
+              <a href="#" class="btn btn-outline-primary btn-sm">Read Guide</a>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-6 col-lg-4">
+          <div class="card shadow-sm border-0 h-100">
+            <div class="card-body p-4">
+              <div class="d-flex align-items-center mb-3">
+                <span class="badge badge-custom me-2">Intermediate</span>
+                <small class="text-muted">15 min read</small>
+              </div>
+              <h5 class="card-title">Advanced Data Analysis Techniques</h5>
+              <p class="card-text text-muted">Learn how to perform sophisticated analyses using our water resource data tools.</p>
+              <a href="#" class="btn btn-outline-primary btn-sm">Read Guide</a>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-6 col-lg-4">
+          <div class="card shadow-sm border-0 h-100">
+            <div class="card-body p-4">
+              <div class="d-flex align-items-center mb-3">
+                <span class="badge badge-custom me-2">Advanced</span>
+                <small class="text-muted">25 min read</small>
+              </div>
+              <h5 class="card-title">Custom Reporting and Export</h5>
+              <p class="card-text text-muted">Create customized reports and export data in various formats for your specific needs.</p>
+              <a href="#" class="btn btn-outline-primary btn-sm">Read Guide</a>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="text-center mt-4">
+        <a href="#" class="btn btn-primary">View All Guides <i class="fas fa-arrow-right ms-1"></i></a>
+      </div>
+    </div>
+    
+    <div id="contact-section" class="mb-5">
+      <div class="row">
+        <div class="col-lg-8">
+          <h2 class="mb-4">Contact Our Support Team</h2>
+          <p class="text-muted mb-4">Can't find the answer you're looking for? Our support team is available to help you with any questions or issues.</p>
+          
+          <div class="card shadow-sm border-0">
+            <div class="card-body p-4">
+              <form>
+                <div class="row g-3">
+                  <div class="col-md-6">
+                    <label for="name" class="form-label">Full Name</label>
+                    <input type="text" class="form-control" id="name" required>
+                  </div>
+                  <div class="col-md-6">
+                    <label for="email" class="form-label">Email Address</label>
+                    <input type="email" class="form-control" id="email" required>
+                  </div>
+                  <div class="col-12">
+                    <label for="subject" class="form-label">Subject</label>
+                    <input type="text" class="form-control" id="subject" required>
+                  </div>
+                  <div class="col-12">
+                    <label for="message" class="form-label">Message</label>
+                    <textarea class="form-control" id="message" rows="5" required></textarea>
+                  </div>
+                  <div class="col-12">
+                    <button type="submit" class="btn btn-primary">Send Message</button>
+                  </div>
+                </div>
+              </form>
+            </div>
+          </div>
+        </div>
+        
+        <div class="col-lg-4 mt-4 mt-lg-0">
+          <h5 class="mb-3">Quick Links</h5>
+          <div class="quick-links mb-4">
+            <a href="#"><i class="fas fa-file-alt me-2"></i> Documentation</a>
+            <a href="#"><i class="fas fa-video me-2"></i> Video Tutorials</a>
+            <a href="#"><i class="fas fa-download me-2"></i> Download Resources</a>
+            <a href="#"><i class="fas fa-calendar-alt me-2"></i> Training Schedule</a>
+            <a href="#"><i class="fas fa-users me-2"></i> Community Forum</a>
+          </div>
+          
+          <div class="card contact-card shadow-sm border-0">
+            <div class="card-body">
+              <h5 class="card-title">Support Hours</h5>
+              <p class="card-text">
+                <strong>Monday - Friday:</strong> 9:00 AM - 6:00 PM<br>
+                <strong>Saturday:</strong> 10:00 AM - 2:00 PM<br>
+                <strong>Sunday:</strong> Closed
+              </p>
+              <p class="card-text">
+                <strong>Email:</strong> support@jalvigyan.org<br>
+                <strong>Phone:</strong> +1 (555) 123-4567
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<footer class="footer">
+  <div class="container">
+    <div class="row">
+      <div class="col-lg-4 mb-4 mb-lg-0">
+        <h5 class="mb-3"><i class="fas fa-tint me-2"></i> Jal Vigyan</h5>
+        <p>Real-time groundwater monitoring system providing accurate data and analytics for sustainable water resource management.</p>
+        <div class="social-links">
+          <a href="#" class="text-light me-3"><i class="fab fa-twitter"></i></a>
+          <a href="#" class="text-light me-3"><i class="fab fa-facebook"></i></a>
+          <a href="#" class="text-light me-3"><i class="fab fa-linkedin"></i></a>
+          <a href="#" class="text-light"><i class="fab fa-instagram"></i></a>
+        </div>
+      </div>
+      <div class="col-lg-2 col-md-6 mb-4 mb-md-0">
+        <h5 class="mb-3">Quick Links</h5>
+        <ul class="list-unstyled">
+          <li class="mb-2"><a href="#" class="text-light">Home</a></li>
+          <li class="mb-2"><a href="#" class="text-light">Dashboard</a></li>
+          <li class="mb-2"><a href="#" class="text-light">Reports</a></li>
+          <li class="mb-2"><a href="#" class="text-light">Data</a></li>
+        </ul>
+      </div>
+      <div class="col-lg-3 col-md-6 mb-4 mb-md-0">
+        <h5 class="mb-3">Resources</h5>
+        <ul class="list-unstyled">
+          <li class="mb-2"><a href="#" class="text-light">Documentation</a></li>
+          <li class="mb-2"><a href="#" class="text-light">API Access</a></li>
+          <li class="mb-2"><a href="#" class="text-light">Research Papers</a></li>
+          <li class="mb-2"><a href="#" class="text-light">Help Center</a></li>
+        </ul>
+      </div>
+      <div class="col-lg-3 col-md-6">
+        <h5 class="mb-3">Contact Us</h5>
+        <ul class="list-unstyled">
+          <li class="mb-2"><i class="fas fa-envelope me-2"></i> info@jalvigyan.gov.in</li>
+          <li class="mb-2"><i class="fas fa-phone me-2"></i> +91 11 2345 6789</li>
+          <li class="mb-2"><i class="fas fa-map-marker-alt me-2"></i> New Delhi, India</li>
+        </ul>
+      </div>
+    </div>
+    <hr class="my-4" style="border-color: rgba(255,255,255,0.2);">
+    <div class="row align-items-center">
+      <div class="col-md-6">
+        <p class="mb-0">© 2025 Jal Vigyan | Real-Time Groundwater Monitoring</p>
+      </div>
+      <div class="col-md-6 text-md-end">
+        <a href="#" class="text-light me-3">Privacy Policy</a>
+        <a href="#" class="text-light">Terms of Service</a>
+      </div>
+    </div>
+  </div>
+</footer>
+
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+<script>
+  // Simple search functionality
+  document.addEventListener('DOMContentLoaded', function() {
+    const searchInput = document.querySelector('.search-box input');
+    const faqItems = document.querySelectorAll('.accordion-item');
+    
+    searchInput.addEventListener('input', function() {
+      const searchTerm = this.value.toLowerCase();
+      
+      faqItems.forEach(item => {
+        const question = item.querySelector('.accordion-button').textContent.toLowerCase();
+        const answer = item.querySelector('.accordion-body').textContent.toLowerCase();
+        
+        if (question.includes(searchTerm) || answer.includes(searchTerm)) {
+          item.style.display = 'block';
+        } else {
+          item.style.display = 'none';
+        }
+      });
+    });
+    
+    // Smooth scrolling for anchor links
+    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+      anchor.addEventListener('click', function (e) {
+        e.preventDefault();
+        
+        const targetId = this.getAttribute('href');
+        if (targetId === '#') return;
+        
+        const targetElement = document.querySelector(targetId);
+        if (targetElement) {
+          window.scrollTo({
+            top: targetElement.offsetTop - 80,
+            behavior: 'smooth'
+          });
+        }
+      });
+    });
+  });
+</script>
+</body>
+</html>

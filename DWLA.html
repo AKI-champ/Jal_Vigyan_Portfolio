@@ -1,0 +1,761 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Jal Vigyan - District Groundwater Analysis</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        :root {
+          --primary: #1e90ff;
+          --primary-dark: #0066cc;
+          --secondary: #0d6efd;
+          --light: #f8f9fa;
+          --dark: #212529;
+          --success: #198754;
+          --warning: #ffc107;
+          --danger: #dc3545;
+        }
+        
+        
+        body { 
+            background: #f7fafc; 
+            font-family: 'Segoe UI', Tahoma, sans-serif; 
+            line-height: 1.6;
+        }
+        
+        .navbar { 
+            background: var(--primary); 
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            padding: 0.8rem 0;
+        }
+        
+        .navbar-brand, .nav-link, .footer { 
+            color: #fff !important; 
+        }
+        
+        .nav-link { 
+            font-weight: 500; 
+            position: relative;
+            transition: all 0.3s;
+            padding: 0.5rem 1rem !important;
+            border-radius: 4px;
+            margin: 0 2px;
+        }
+        
+        .nav-link:hover, .nav-link.active {
+            background-color: rgba(255, 255, 255, 0.15);
+            color: #fff !important;
+            transform: translateY(-2px);
+        }
+        
+        .page-header {
+            background: linear-gradient(rgba(30,144,255,0.9), rgba(30,144,255,0.95)),url('https://images.unsplash.com/photo-1601425246586-0e1101ce5846?fm=jpg&q=60&w=3000&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8NHx8d2F0ZXIlMjBsYW5kc2NhcGV8ZW58MHx8MHx8fDA%3D') center;
+            color: white;
+            padding: 60px 0 100px;
+            margin-bottom: 30px;
+        }
+        
+        .search-box {
+            background: white;
+            border-radius: 10px;
+            padding: 20px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            margin-bottom: 30px;
+        }
+        
+        .map-container {
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            margin-bottom: 30px;
+            background: white;
+            padding: 15px;
+        }
+        
+        .chart-container {
+            background: white;
+            border-radius: 10px;
+            padding: 20px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            margin-bottom: 30px;
+            height: 100%;
+        }
+        
+        .district-info {
+            background: white;
+            border-radius: 10px;
+            padding: 20px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            margin-bottom: 30px;
+        }
+        
+        .footer { 
+            background: var(--primary-dark); 
+            padding: 30px 0; 
+            text-align: center; 
+            margin-top: 50px;
+        }
+        
+        .water-wave {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            overflow: hidden;
+            line-height: 0;
+        }
+        
+        .water-wave svg {
+            position: relative;
+            display: block;
+            width: calc(100% + 1.3px);
+            height: 50px;
+        }
+        
+        .water-wave .shape-fill {
+            fill: #f7fafc;
+        }
+        
+        .stat-card {
+            transition: all 0.3s;
+            border: none;
+            border-radius: 10px;
+            height: 100%;
+        }
+        
+        .stat-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 20px rgba(0,0,0,0.15);
+        }
+        
+        .district-list {
+            max-height: 300px;
+            overflow-y: auto;
+        }
+        
+        .district-item {
+            padding: 10px 15px;
+            border-bottom: 1px solid #eee;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        
+        .district-item:hover {
+            background-color: #f8f9fa;
+        }
+        
+        .district-item.active {
+            background-color: rgba(30, 144, 255, 0.1);
+            border-left: 4px solid var(--primary);
+        }
+        
+        .map-placeholder {
+            background: #e9ecef;
+            height: 500px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 8px;
+            color: #6c757d;
+            font-size: 1.1rem;
+        }
+        
+        @media (max-width: 768px) {
+            .page-header h1 {
+                font-size: 1.8rem;
+            }
+            
+            .map-placeholder {
+                height: 300px;
+            }
+        }
+    </style>
+</head>
+<body>
+
+<!-- Navigation Bar (theme aligned with page1.html) -->
+<nav class="navbar navbar-expand-lg navbar-dark sticky-top">
+    <div class="container">
+        <a class="navbar-brand fw-bold d-flex align-items-center" href="page1.html">
+            <i class="fas fa-tint me-2"></i> Jal Vigyan
+        </a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navMenu">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navMenu">
+            <ul class="navbar-nav ms-auto">
+                <li class="nav-item"><a class="nav-link" href="page1.html">Home</a></li>
+                <li class="nav-item"><a class="nav-link" href="aboutus.html">About Us</a></li>
+                <li class="nav-item"><a class="nav-link" href="contact.html">Contact Us</a></li>
+                <li class="nav-item"><a class="nav-link" href="DDC.html">DDC</a></li>
+                <li class="nav-item"><a class="nav-link" href="SWR.html">SWR</a></li>
+                <li class="nav-item"><a class="nav-link" href="GWS.html">GWS</a></li>
+                <li class="nav-item"><a class="nav-link" href="help.html">Help?</a></li>
+      <div class="ms-3">
+            </ul>
+           
+        </div>
+    </div>
+    </nav>
+
+<!-- Page Header -->
+<div class="page-header position-relative">
+    <div class="container text-center">
+        <h1 class="display-5 fw-bold">District-Wise Groundwater Analysis</h1>
+        <p class="lead">Explore groundwater levels, trends, and rainfall data across Indian districts</p>
+    </div>
+    
+</div>
+
+<!-- Main Content -->
+<div class="container">
+    <!-- Search and District Selection -->
+    <div class="search-box">
+        <div class="row">
+            <div class="col-md-6">
+                <div class="mb-3">
+                    <label for="stateSelect" class="form-label">Select State</label>
+                    <select class="form-select" id="stateSelect">
+                        <option value="">All States/UTs</option>
+                        <option value="andhra-pradesh">Andhra Pradesh</option>
+                        <option value="arunachal-pradesh">Arunachal Pradesh</option>
+                        <option value="assam">Assam</option>
+                        <option value="bihar">Bihar</option>
+                        <option value="chhattisgarh">Chhattisgarh</option>
+                        <option value="goa">Goa</option>
+                        <option value="gujarat">Gujarat</option>
+                        <option value="haryana">Haryana</option>
+                        <option value="himachal-pradesh">Himachal Pradesh</option>
+                        <option value="jharkhand">Jharkhand</option>
+                        <option value="karnataka">Karnataka</option>
+                        <option value="kerala">Kerala</option>
+                        <option value="madhya-pradesh">Madhya Pradesh</option>
+                        <option value="maharashtra">Maharashtra</option>
+                        <option value="manipur">Manipur</option>
+                        <option value="meghalaya">Meghalaya</option>
+                        <option value="mizoram">Mizoram</option>
+                        <option value="nagaland">Nagaland</option>
+                        <option value="odisha">Odisha</option>
+                        <option value="punjab">Punjab</option>
+                        <option value="rajasthan">Rajasthan</option>
+                        <option value="sikkim">Sikkim</option>
+                        <option value="tamil-nadu">Tamil Nadu</option>
+                        <option value="telangana">Telangana</option>
+                        <option value="tripura">Tripura</option>
+                        <option value="uttar-pradesh">Uttar Pradesh</option>
+                        <option value="uttarakhand">Uttarakhand</option>
+                        <option value="west-bengal">West Bengal</option>
+                        <option value="andaman-nicobar">Andaman and Nicobar Islands</option>
+                        <option value="chandigarh">Chandigarh</option>
+                        <option value="dadra-nagar-haveli-daman-diu">Dadra & Nagar Haveli and Daman & Diu</option>
+                        <option value="delhi">Delhi</option>
+                        <option value="jammu-kashmir">Jammu and Kashmir</option>
+                        <option value="ladakh">Ladakh</option>
+                        <option value="lakshadweep">Lakshadweep</option>
+                        <option value="puducherry">Puducherry</option>
+                    </select>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="mb-3">
+                    <label for="districtSearch" class="form-label">Search District</label>
+                    <input type="text" class="form-control" id="districtSearch" placeholder="Enter district name">
+                </div>
+            </div>
+        </div>
+        
+        <div class="district-list mt-3" id="districtList"></div>
+    </div>
+    
+    <!-- Map and District Info -->
+    <div class="row">
+        <div class="col-lg-8">
+            <div class="map-container">
+                <h5 class="mb-3">District Map: <span id="currentDistrict">Pune, Maharashtra</span></h5>
+                <div class="map-placeholder">
+                    <div class="text-center">
+                        <i class="fas fa-map-marked-alt fa-3x mb-3 text-primary"></i>
+                        <p>Interactive District Map<br><small>Groundwater levels visualized by color intensity</small></p>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-4">
+            <div class="district-info">
+                <h5 class="mb-3">District Information</h5>
+                <div class="row text-center mb-4">
+                    <div class="col-6">
+                        <div class="stat-card card p-3 mb-3">
+                            <h4 class="text-primary">6.2m</h4>
+                            <small>Current Water Level</small>
+                        </div>
+                    </div>
+                    <div class="col-6">
+                        <div class="stat-card card p-3 mb-3">
+                            <h4 class="text-success">Safe</h4>
+                            <small>Status</small>
+                        </div>
+                    </div>
+                </div>
+                
+                <h6>Key Statistics</h6>
+                <ul class="list-unstyled">
+                    <li class="mb-2"><i class="fas fa-arrow-up text-success me-2"></i> Trend: Rising (0.3m/month)</li>
+                    <li class="mb-2"><i class="fas fa-tint me-2 text-primary"></i> Rainfall: 85% of average</li>
+                    <li class="mb-2"><i class="fas fa-industry me-2 text-info"></i> Major Use: Agriculture (65%)</li>
+                    <li class="mb-2"><i class="fas fa-exclamation-triangle me-2 text-warning"></i> Alert: Moderate extraction rate</li>
+                </ul>
+                
+                <button class="btn btn-primary w-100 mt-3"><i class="fas fa-download me-2"></i> Download District Data</button>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Charts Section -->
+    <div class="row mt-4">
+        <div class="col-lg-6">
+            <div class="chart-container">
+                <h5 class="mb-3">Time vs Groundwater Level</h5>
+                <canvas id="timeLevelChart"></canvas>
+            </div>
+        </div>
+        <div class="col-lg-6">
+            <div class="chart-container">
+                <h5 class="mb-3">Date vs Groundwater Level (Last 30 Days)</h5>
+                <canvas id="dateLevelChart"></canvas>
+            </div>
+        </div>
+    </div>
+    
+    <div class="row mt-4">
+        <div class="col-lg-6">
+            <div class="chart-container">
+                <h5 class="mb-3">Monthly Groundwater Level vs Rainfall</h5>
+                <canvas id="monthlyChart"></canvas>
+            </div>
+        </div>
+        <div class="col-lg-6">
+            <div class="chart-container">
+                <h5 class="mb-3">Yearly Groundwater Level vs Rainfall</h5>
+                <canvas id="yearlyChart"></canvas>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Footer -->
+<footer class="footer">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-4 mb-4 mb-lg-0">
+                <h5 class="mb-3"><i class="fas fa-tint me-2"></i> Jal Vigyan</h5>
+                <p>Real-time groundwater monitoring system providing accurate data and analytics for sustainable water resource management.</p>
+                <div class="social-links">
+                    <a href="#" class="text-light me-3"><i class="fab fa-twitter"></i></a>
+                    <a href="#" class="text-light me-3"><i class="fab fa-facebook"></i></a>
+                    <a href="#" class="text-light me-3"><i class="fab fa-linkedin"></i></a>
+                    <a href="#" class="text-light"><i class="fab fa-instagram"></i></a>
+                </div>
+            </div>
+            <div class="col-lg-2 col-md-6 mb-4 mb-md-0">
+                <h5 class="mb-3">Quick Links</h5>
+                <ul class="list-unstyled">
+                    <li class="mb-2"><a href="index.html" class="text-light">Home</a></li>
+                    <li class="mb-2"><a href="maps.html" class="text-light">Maps</a></li>
+                    <li class="mb-2"><a href="#" class="text-light">Recommendation</a></li>
+                    <li class="mb-2"><a href="#" class="text-light">Data Download</a></li>
+                </ul>
+            </div>
+            <div class="col-lg-3 col-md-6 mb-4 mb-md-0">
+                <h5 class="mb-3">Resources</h5>
+                <ul class="list-unstyled">
+                    <li class="mb-2"><a href="#" class="text-light">Documentation</a></li>
+                    <li class="mb-2"><a href="#" class="text-light">API Access</a></li>
+                    <li class="mb-2"><a href="#" class="text-light">Research Papers</a></li>
+                    <li class="mb-2"><a href="#" class="text-light">Help Center</a></li>
+                </ul>
+            </div>
+            <div class="col-lg-3 col-md-6">
+                <h5 class="mb-3">Contact Us</h5>
+                <ul class="list-unstyled">
+                    <li class="mb-2"><i class="fas fa-envelope me-2"></i> info@jalvigyan.gov.in</li>
+                    <li class="mb-2"><i class="fas fa-phone me-2"></i> +91 11 2345 6789</li>
+                    <li class="mb-2"><i class="fas fa-map-marker-alt me-2"></i> New Delhi, India</li>
+                </ul>
+            </div>
+        </div>
+        <hr class="my-4" style="border-color: rgba(255,255,255,0.2);">
+        <div class="row align-items-center">
+            <div class="col-md-6">
+                <p class="mb-0">© 2025 Jal Vigyan | Real-Time Groundwater Monitoring</p>
+            </div>
+            <div class="col-md-6 text-md-end">
+                <a href="#" class="text-light me-3">Privacy Policy</a>
+                <a href="#" class="text-light">Terms of Service</a>
+            </div>
+        </div>
+    </div>
+</footer>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+<script>
+    // Hide current page in navbar
+    (function(){
+        var path = location.pathname.split('/').pop() || 'DWLA.html';
+        document.querySelectorAll('.navbar .nav-link[href]').forEach(function(a){
+            var href = a.getAttribute('href');
+            if (!href || href === '#') return;
+            var file = href.split('/').pop();
+            if (file === path) {
+                var li = a.closest('li');
+                if (li) li.style.display = 'none';
+            }
+        });
+    })();
+
+    // Sample data for charts
+    const districtData = {
+        pune: {
+            name: "Pune, Maharashtra",
+            currentLevel: 6.2,
+            status: "Safe",
+            timeLevel: [6.8, 6.5, 6.3, 6.1, 6.0, 6.2, 6.2],
+            dateLevel: [6.1, 6.0, 6.1, 6.2, 6.1, 6.0, 5.9, 6.0, 6.1, 6.2, 6.3, 6.2, 6.1, 6.2, 6.3, 6.4, 6.3, 6.2, 6.3, 6.4, 6.3, 6.2, 6.1, 6.2, 6.3, 6.2, 6.1, 6.2, 6.2, 6.2],
+            monthly: {
+                levels: [6.8, 6.5, 6.2, 5.9, 5.7, 5.5, 5.8, 6.0, 6.2, 6.5, 6.7, 6.8],
+                rainfall: [85, 92, 78, 65, 45, 30, 75, 88, 92, 87, 80, 82]
+            },
+            yearly: {
+                levels: [7.2, 6.9, 6.5, 6.2, 6.0],
+                rainfall: [92, 88, 85, 82, 85]
+            }
+        },
+        mumbai: {
+            name: "Mumbai, Maharashtra",
+            currentLevel: 4.1,
+            status: "Critical",
+            timeLevel: [4.8, 4.5, 4.3, 4.2, 4.1, 4.0, 4.1],
+            dateLevel: [4.3, 4.2, 4.1, 4.0, 4.1, 4.0, 3.9, 4.0, 4.1, 4.0, 3.9, 3.8, 3.9, 4.0, 4.1, 4.0, 3.9, 4.0, 4.1, 4.0, 3.9, 4.0, 4.1, 4.0, 3.9, 4.0, 4.1, 4.0, 4.1, 4.1],
+            monthly: {
+                levels: [4.8, 4.5, 4.2, 4.0, 3.8, 3.6, 3.9, 4.1, 4.2, 4.5, 4.7, 4.8],
+                rainfall: [95, 98, 85, 70, 50, 35, 80, 92, 95, 90, 85, 88]
+            },
+            yearly: {
+                levels: [5.2, 4.9, 4.5, 4.2, 4.1],
+                rainfall: [98, 95, 90, 88, 90]
+            }
+        }
+        // Additional district data would go here
+    };
+
+    // State to districts map (sample lists; extend as needed)
+    const stateToDistricts = {
+        'maharashtra': [
+            { key: 'pune', label: 'Pune, Maharashtra', level: 6.2, status: 'Safe' },
+            { key: 'mumbai', label: 'Mumbai, Maharashtra', level: 4.1, status: 'Critical' },
+            { key: 'nagpur', label: 'Nagpur, Maharashtra', level: 8.5, status: 'Moderate' }
+        ],
+        'uttar-pradesh': [
+            { key: 'lucknow', label: 'Lucknow, Uttar Pradesh', level: 7.3, status: 'Safe' }
+        ],
+        'karnataka': [
+            { key: 'bangalore', label: 'Bangalore Urban, Karnataka', level: 5.8, status: 'Critical' }
+        ],
+        'gujarat': [
+            { key: 'ahmedabad', label: 'Ahmedabad, Gujarat', level: 9.1, status: 'Safe' }
+        ]
+        // Add more states and districts here
+    };
+
+    // Render districts by state selection
+    function renderDistrictList(filterState = '') {
+        const container = document.getElementById('districtList');
+        container.innerHTML = '';
+
+        let entries = [];
+        if (filterState && stateToDistricts[filterState]) {
+            entries = stateToDistricts[filterState];
+        } else {
+            // Flatten all states for "All" view
+            Object.values(stateToDistricts).forEach(list => entries.push(...list));
+        }
+
+        entries.forEach((d, index) => {
+            const div = document.createElement('div');
+            div.className = 'district-item' + (index === 0 ? ' active' : '');
+            div.setAttribute('data-district', d.key);
+            div.innerHTML = `
+                <h6 class="mb-1">${d.label}</h6>
+                <small class="text-muted">Current Level: ${d.level}m | Status: ${d.status}</small>
+            `;
+            container.appendChild(div);
+        });
+
+        bindDistrictClicks();
+
+        if (entries.length > 0) {
+            const first = entries[0].key;
+            const data = districtData[first] || { name: entries[0].label, currentLevel: entries[0].level, status: entries[0].status, timeLevel: [6,6,6,6,6,6,6], dateLevel: new Array(30).fill(entries[0].level), monthly: { levels: new Array(12).fill(entries[0].level), rainfall: new Array(12).fill(80) }, yearly: { levels: [6,6,6,6,6], rainfall: [85,85,85,85,85] } };
+            document.getElementById('currentDistrict').textContent = data.name;
+            document.querySelector('.stat-card h4.text-primary').textContent = data.currentLevel + 'm';
+            document.querySelector('.stat-card h4.text-success').textContent = data.status;
+            initializeCharts(first in districtData ? first : 'pune');
+        }
+    }
+
+    function bindDistrictClicks() {
+        const districtItems = document.querySelectorAll('.district-item');
+        districtItems.forEach(item => {
+            item.addEventListener('click', function() {
+                districtItems.forEach(i => i.classList.remove('active'));
+                this.classList.add('active');
+                const district = this.getAttribute('data-district');
+                const data = districtData[district];
+                if (data) {
+                    document.getElementById('currentDistrict').textContent = data.name;
+                    document.querySelector('.stat-card h4.text-primary').textContent = data.currentLevel + 'm';
+                    document.querySelector('.stat-card h4.text-success').textContent = data.status;
+                    initializeCharts(district);
+                }
+            });
+        });
+    }
+
+    // Initialize charts
+    let timeLevelChart, dateLevelChart, monthlyChart, yearlyChart;
+    
+    function initializeCharts(district) {
+        const data = districtData[district];
+        
+        // Time vs Groundwater Level Chart
+        if (timeLevelChart) timeLevelChart.destroy();
+        const timeCtx = document.getElementById('timeLevelChart').getContext('2d');
+        timeLevelChart = new Chart(timeCtx, {
+            type: 'line',
+            data: {
+                labels: ['6am', '9am', '12pm', '3pm', '6pm', '9pm', '12am'],
+                datasets: [{
+                    label: 'Groundwater Level (m)',
+                    data: data.timeLevel,
+                    borderColor: '#1e90ff',
+                    backgroundColor: 'rgba(30, 144, 255, 0.1)',
+                    tension: 0.4,
+                    fill: true
+                }]
+            },
+            options: {
+                responsive: true,
+                plugins: {
+                    legend: {
+                        display: false
+                    }
+                },
+                scales: {
+                    y: {
+                        beginAtZero: false,
+                        title: {
+                            display: true,
+                            text: 'Water Level (m)'
+                        }
+                    }
+                }
+            }
+        });
+        
+        // Date vs Groundwater Level Chart
+        if (dateLevelChart) dateLevelChart.destroy();
+        const dateLabels = [];
+        for (let i = 29; i >= 0; i--) {
+            const date = new Date();
+            date.setDate(date.getDate() - i);
+            dateLabels.push(date.getDate() + '/' + (date.getMonth()+1));
+        }
+        
+        const dateCtx = document.getElementById('dateLevelChart').getContext('2d');
+        dateLevelChart = new Chart(dateCtx, {
+            type: 'line',
+            data: {
+                labels: dateLabels,
+                datasets: [{
+                    label: 'Groundwater Level (m)',
+                    data: data.dateLevel,
+                    borderColor: '#198754',
+                    backgroundColor: 'rgba(25, 135, 84, 0.1)',
+                    tension: 0.4,
+                    fill: true
+                }]
+            },
+            options: {
+                responsive: true,
+                plugins: {
+                    legend: {
+                        display: false
+                    }
+                },
+                scales: {
+                    y: {
+                        beginAtZero: false,
+                        title: {
+                            display: true,
+                            text: 'Water Level (m)'
+                        }
+                    }
+                }
+            }
+        });
+        
+        // Monthly Groundwater Level vs Rainfall Chart
+        if (monthlyChart) monthlyChart.destroy();
+        const monthlyCtx = document.getElementById('monthlyChart').getContext('2d');
+        monthlyChart = new Chart(monthlyCtx, {
+            type: 'bar',
+            data: {
+                labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
+                datasets: [
+                    {
+                        label: 'Groundwater Level (m)',
+                        data: data.monthly.levels,
+                        backgroundColor: 'rgba(30, 144, 255, 0.7)',
+                        yAxisID: 'y'
+                    },
+                    {
+                        label: 'Rainfall (%)',
+                        data: data.monthly.rainfall,
+                        type: 'line',
+                        borderColor: '#ffc107',
+                        backgroundColor: 'rgba(255, 193, 7, 0.1)',
+                        yAxisID: 'y1',
+                        fill: true
+                    }
+                ]
+            },
+            options: {
+                responsive: true,
+                interaction: {
+                    mode: 'index',
+                    intersect: false,
+                },
+                scales: {
+                    y: {
+                        type: 'linear',
+                        display: true,
+                        position: 'left',
+                        title: {
+                            display: true,
+                            text: 'Water Level (m)'
+                        }
+                    },
+                    y1: {
+                        type: 'linear',
+                        display: true,
+                        position: 'right',
+                        title: {
+                            display: true,
+                            text: 'Rainfall (%)'
+                        },
+                        grid: {
+                            drawOnChartArea: false,
+                        },
+                        max: 100
+                    }
+                }
+            }
+        });
+        
+        // Yearly Groundwater Level vs Rainfall Chart
+        if (yearlyChart) yearlyChart.destroy();
+        const yearlyCtx = document.getElementById('yearlyChart').getContext('2d');
+        const years = [];
+        const currentYear = new Date().getFullYear();
+        for (let i = 4; i >= 0; i--) {
+            years.push(currentYear - i);
+        }
+        
+        yearlyChart = new Chart(yearlyCtx, {
+            type: 'bar',
+            data: {
+                labels: years,
+                datasets: [
+                    {
+                        label: 'Groundwater Level (m)',
+                        data: data.yearly.levels,
+                        backgroundColor: 'rgba(30, 144, 255, 0.7)',
+                        yAxisID: 'y'
+                    },
+                    {
+                        label: 'Rainfall (%)',
+                        data: data.yearly.rainfall,
+                        type: 'line',
+                        borderColor: '#ffc107',
+                        backgroundColor: 'rgba(255, 193, 7, 0.1)',
+                        yAxisID: 'y1',
+                        fill: true
+                    }
+                ]
+            },
+            options: {
+                responsive: true,
+                interaction: {
+                    mode: 'index',
+                    intersect: false,
+                },
+                scales: {
+                    y: {
+                        type: 'linear',
+                        display: true,
+                        position: 'left',
+                        title: {
+                            display: true,
+                            text: 'Water Level (m)'
+                        }
+                    },
+                    y1: {
+                        type: 'linear',
+                        display: true,
+                        position: 'right',
+                        title: {
+                            display: true,
+                            text: 'Rainfall (%)'
+                        },
+                        grid: {
+                            drawOnChartArea: false,
+                        },
+                        max: 100
+                    }
+                }
+            }
+        });
+    }
+    
+    // District selection functionality
+    document.addEventListener('DOMContentLoaded', function() {
+        // Render initial districts and charts
+        renderDistrictList('maharashtra');
+        
+        // Search functionality
+        const districtSearch = document.getElementById('districtSearch');
+        districtSearch.addEventListener('input', function() {
+            const searchTerm = this.value.toLowerCase();
+            document.querySelectorAll('.district-item').forEach(item => {
+                const districtName = item.querySelector('h6').textContent.toLowerCase();
+                if (districtName.includes(searchTerm)) {
+                    item.style.display = 'block';
+                } else {
+                    item.style.display = 'none';
+                }
+            });
+        });
+        
+        // State filter functionality
+        const stateSelect = document.getElementById('stateSelect');
+        stateSelect.addEventListener('change', function() {
+            const selectedState = this.value;
+            renderDistrictList(selectedState);
+        });
+    });
+</script>
+</body>
+</html>
